@@ -72,6 +72,8 @@ function main() {
     extractArchive
     buildTablePrefix
 
+    prepareDb
+
     importMedia
 
     #+----------------------------------------------------------------------------------------------------------+
@@ -114,6 +116,13 @@ function buildTablePrefix() {
     table_prefix="${app_code}_${th_import_date//-/}"
 }
 
+function prepareDb() {
+    printMsg "Insert utils functions into GeoNature database..."
+    export PGPASSWORD="${db_pass}"; \
+        psql -h "${db_host}" -U "${db_user}" -d "${db_name}" \
+            -f "${sql_shared_dir}/utils_functions.sql"
+}
+
 function parseCsv() {
     if [[ $# -lt 2 ]]; then
         exitScript "Missing required argument to ${FUNCNAME[0]}()!" 2
@@ -128,7 +137,7 @@ function parseCsv() {
         data_type_abbr="${data_type}"
     fi
     declare -n csv_file="th_filename_${data_type_abbr}"
-    local csv_to_import="${csv_file%.csv}_rti.csv"
+    local csv_to_import="${csv_file%.[ct]sv}_rti.csv"
 
     # Exit if CSV file not found
     if ! [[ -f "${raw_dir}/${csv_file}" ]]; then
@@ -160,7 +169,7 @@ function executeCopy() {
         data_type_abbr="${data_type}"
     fi
     declare -n csv_file="th_filename_${data_type_abbr}"
-    local csv_to_import="${csv_file%.csv}_rti.csv"
+    local csv_to_import="${csv_file%.[ct]sv}_rti.csv"
 
     # Exit if CSV file not found
     if ! [[ -f "${raw_dir}/${csv_file}" ]]; then

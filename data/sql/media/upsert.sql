@@ -67,7 +67,7 @@ BEGIN
                 mit.author,
                 mit."description",
                 mit."date",
-                2,
+                mit."type",
                 mit.source,
                 mit.licence
             FROM gn_imports.${mediaImportTable} AS mit

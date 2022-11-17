@@ -25,6 +25,7 @@ CREATE TABLE gn_imports.:mediaImportTable AS
         auteur AS author,
         desc_media AS "description",
         date_media AS "date",
+        id_type AS "type",
         source,
         licence
     FROM taxonomie.t_medias
@@ -60,6 +61,7 @@ COPY gn_imports.:mediaImportTable (
     author,
     "description",
     "date",
+    "type",
     source,
     licence
 )
